@@ -71,24 +71,25 @@ Lambda role allows only:
 ---
 
 ## 📁 Repository Structure
+```text
 .
 ├── app/
-│ ├── main.go
-│ ├── go.mod
-│ └── go.sum
+│   ├── main.go
+│   ├── go.mod
+│   └── go.sum
 ├── infra/
-│ └── template.yaml
+│   └── template.yaml
 ├── test/
-│ └── run-challenge-tests.sh
+│   └── run-challenge-tests.sh
 ├── output/
-│ └── (generated — CloudFormation JSON + test logs)
+│   └── (generated)
 ├── .github/
-│ └── workflows/
-│ ├── build.yaml
-│ └── deploy.yaml
+│   └── workflows/
+│       ├── build.yaml
+│       └── deploy.yaml
 ├── Dockerfile
 └── README.md
-
+```
 
 ---
 
@@ -114,6 +115,13 @@ Lambda role allows only:
 
 ### 1. Create the ECR repo and initial stack prerequisites
 - create it manually first (ECR repo is outside of CloudFormation scope here)
+```bash
+aws ecr create-repository \                            
+  --repository-name "${STACK_NAME}" \                                                              
+  --image-tag-mutability IMMUTABLE \
+  --image-scanning-configuration scanOnPush=true \
+  --region "${AWS_REGION}"
+```
 
 ### 2. Configure GitHub secrets
 
