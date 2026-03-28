@@ -178,8 +178,8 @@ Outputs:
   AssetsBucketName:
     Value: !Ref AssetsBucket
 
-  EcrRepositoryUri:
-    Value: !GetAtt AppEcrRepository.RepositoryUri
+  # EcrRepositoryUri:
+  #   Value: !GetAtt AppEcrRepository.RepositoryUri
 
   LambdaFunctionName:
     Value: !Ref AssetReaderFunction
