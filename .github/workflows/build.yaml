@@ -56,7 +56,7 @@ jobs:
 
       - name: Build and push image
         run: |
-          docker build -t ${{ steps.meta.outputs.image_uri }} .
+          docker build --platform linux/amd64 -t ${{ steps.meta.outputs.image_uri }} .
           docker push ${{ steps.meta.outputs.image_uri }}
 
   dispatch-deploy:
