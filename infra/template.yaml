@@ -71,6 +71,11 @@ Resources:
                 Action:
                   - s3:GetObject
                 Resource: !Sub "${AssetsBucket.Arn}/*"
+              - Sid: ListBucketForHeadObjectSemantics
+                Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource: !GetAtt AssetsBucket.Arn
 
   AssetReaderFunction:
     Type: AWS::Lambda::Function
