@@ -34,13 +34,13 @@ Resources:
         BlockPublicPolicy: true
         RestrictPublicBuckets: true
 
-  AppEcrRepository:
-    Type: AWS::ECR::Repository
-    Properties:
-      RepositoryName: !Sub "${ProjectName}"
-      ImageTagMutability: IMMUTABLE
-      ImageScanningConfiguration:
-        ScanOnPush: true
+  # AppEcrRepository:
+  #   Type: AWS::ECR::Repository
+  #   Properties:
+  #     RepositoryName: !Sub "${ProjectName}"
+  #     ImageTagMutability: IMMUTABLE
+  #     ImageScanningConfiguration:
+  #       ScanOnPush: true
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
