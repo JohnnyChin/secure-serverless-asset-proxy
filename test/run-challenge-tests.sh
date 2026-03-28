@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 #
 # =============================================================================
-# Zota — Secure Serverless Asset Proxy (challenge acceptance tests)
+# Secure Serverless Asset Proxy (challenge acceptance tests for s3-lambda-cdn-challenge)
 # =============================================================================
-# Source: project README, infra/template.yaml Outputs, app/main.go behavior.
-# (PDF "Zota's Technical Challenge" was not available in-repo; extend if needed.)
 #
 # What this script exercises:
 #   1. CloudFormation stack describable; JSON written under output/

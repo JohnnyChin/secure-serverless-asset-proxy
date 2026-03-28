@@ -1,0 +1,18 @@
+[
+    {
+        "OutputKey": "AssetsBucketName",
+        "OutputValue": "johnny-s3-lambda-cdn-challenge-mar2026"
+    },
+    {
+        "OutputKey": "LambdaFunctionUrl",
+        "OutputValue": "https://43ulje3ukxfigallaeb4azvecm0avgbt.lambda-url.ap-southeast-1.on.aws/"
+    },
+    {
+        "OutputKey": "LambdaFunctionName",
+        "OutputValue": "secure-serverless-asset-proxy-reader"
+    },
+    {
+        "OutputKey": "CloudFrontDomainName",
+        "OutputValue": "d352lrg4gyh2by.cloudfront.net"
+    }
+]

@@ -1,0 +1,13 @@
+Challenge tests — 20260328-222923 | log: /Users/johnny/Repo/secure-serverless-asset-proxy/output/challenge-test-20260328-222923.log
+AWS_REGION=ap-southeast-1 CFN_STACK_NAME=secure-serverless-asset-proxy S3_BUCKET_NAME=johnny-s3-lambda-cdn-challenge-mar2026 ECR_REPOSITORY=secure-serverless-asset-proxy
+[1] CloudFormation → output/
+PASS: stack status UPDATE_COMPLETE
+[2] GET / → 400
+PASS: GET / → 400
+[3] missing key → 404
+PASS: missing object → 404
+[4] upload + GET → 200
+PASS: object round-trip
+[5] Lambda URL direct → 403
+PASS: Lambda URL 403
+Done. Log: /Users/johnny/Repo/secure-serverless-asset-proxy/output/challenge-test-20260328-222923.log | Passed: 5 Failed: 0

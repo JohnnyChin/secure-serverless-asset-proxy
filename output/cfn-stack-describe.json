@@ -1,0 +1,62 @@
+{
+    "Stacks": [
+        {
+            "StackId": "arn:aws:cloudformation:ap-southeast-1:435175629156:stack/secure-serverless-asset-proxy/0576e9e0-2a9c-11f1-9352-027ff64ee41f",
+            "StackName": "secure-serverless-asset-proxy",
+            "ChangeSetId": "arn:aws:cloudformation:ap-southeast-1:435175629156:changeSet/awscli-cloudformation-package-deploy-1774708047/d25875dc-d5fd-40c0-96c4-0e58b6b3651b",
+            "Description": "S3 private assets via Lambda Function URL behind CloudFront",
+            "Parameters": [
+                {
+                    "ParameterKey": "BucketName",
+                    "ParameterValue": "johnny-s3-lambda-cdn-challenge-mar2026"
+                },
+                {
+                    "ParameterKey": "ProjectName",
+                    "ParameterValue": "secure-serverless-asset-proxy"
+                },
+                {
+                    "ParameterKey": "ImageUri",
+                    "ParameterValue": "435175629156.dkr.ecr.ap-southeast-1.amazonaws.com/secure-serverless-asset-proxy:f9a99e86ed1fe964b377b0a8595eb7309d21eaf6"
+                }
+            ],
+            "CreationTime": "2026-03-28T11:48:22.079000+00:00",
+            "LastUpdatedTime": "2026-03-28T14:27:39.752000+00:00",
+            "RollbackConfiguration": {},
+            "StackStatus": "UPDATE_COMPLETE",
+            "DisableRollback": false,
+            "NotificationARNs": [],
+            "Capabilities": [
+                "CAPABILITY_NAMED_IAM"
+            ],
+            "Outputs": [
+                {
+                    "OutputKey": "AssetsBucketName",
+                    "OutputValue": "johnny-s3-lambda-cdn-challenge-mar2026"
+                },
+                {
+                    "OutputKey": "LambdaFunctionUrl",
+                    "OutputValue": "https://43ulje3ukxfigallaeb4azvecm0avgbt.lambda-url.ap-southeast-1.on.aws/"
+                },
+                {
+                    "OutputKey": "LambdaFunctionName",
+                    "OutputValue": "secure-serverless-asset-proxy-reader"
+                },
+                {
+                    "OutputKey": "CloudFrontDomainName",
+                    "OutputValue": "d352lrg4gyh2by.cloudfront.net"
+                }
+            ],
+            "Tags": [],
+            "EnableTerminationProtection": false,
+            "DriftInformation": {
+                "StackDriftStatus": "NOT_CHECKED"
+            },
+            "LastOperations": [
+                {
+                    "OperationType": "UPDATE_STACK",
+                    "OperationId": "03b4dfe2-c616-4a51-b978-971755f49a05"
+                }
+            ]
+        }
+    ]
+}
