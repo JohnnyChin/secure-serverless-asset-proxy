@@ -1,0 +1,62 @@
+name: deploy-infra
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Immutable ECR image tag to deploy"
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+  CFN_STACK_NAME: ${{ secrets.CFN_STACK_NAME }}
+  S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Resolve account ID
+        id: aws
+        run: |
+          ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          echo "account_id=${ACCOUNT_ID}" >> "$GITHUB_OUTPUT"
+
+      - name: Build image URI
+        id: image
+        run: |
+          IMAGE_URI=${{ steps.aws.outputs.account_id }}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:${{ github.event.inputs.image_tag }}
+          echo "image_uri=${IMAGE_URI}" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy CloudFormation stack
+        run: |
+          aws cloudformation deploy \
+            --template-file infra/template.yaml \
+            --stack-name "${CFN_STACK_NAME}" \
+            --capabilities CAPABILITY_NAMED_IAM \
+            --parameter-overrides \
+              ProjectName="${CFN_STACK_NAME}" \
+              BucketName="${S3_BUCKET_NAME}" \
+              ImageUri="${{ steps.image.outputs.image_uri }}"
+
+      - name: Show outputs
+        run: |
+          aws cloudformation describe-stacks \
+            --stack-name "${CFN_STACK_NAME}" \
+            --query 'Stacks[0].Outputs'
