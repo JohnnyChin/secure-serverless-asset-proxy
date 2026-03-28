@@ -18,7 +18,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
 
 # CMD ["bootstrap"]
 
-FROM public.ecr.aws/lambda/go:1.23
+FROM public.ecr.aws/lambda/go:1
 
 WORKDIR /var/task
 COPY --from=builder /src/bootstrap ./bootstrap
