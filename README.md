@@ -78,10 +78,14 @@ Lambda role allows only:
 │ └── go.sum
 ├── infra/
 │ └── template.yaml
+├── test/
+│ └── run-challenge-tests.sh
+├── output/
+│ └── (generated — CloudFormation JSON + test logs)
 ├── .github/
 │ └── workflows/
-│ ├── build.yml
-│ └── deploy.yml
+│ ├── build.yaml
+│ └── deploy.yaml
 ├── Dockerfile
 └── README.md
 
@@ -109,10 +113,7 @@ Lambda role allows only:
 ## One-time bootstrap
 
 ### 1. Create the ECR repo and initial stack prerequisites
-
-You can either:
-- create the ECR repository from the CloudFormation template after the first deploy, or
-- create it manually first
+- create it manually first (ECR repo is outside of CloudFormation scope here)
 
 ### 2. Configure GitHub secrets
 
@@ -140,3 +141,30 @@ The deploy workflow will:
 
 ```bash
 aws s3 cp ./sample.png s3://$S3_BUCKET_NAME/assets/sample.png
+
+
+---
+
+
+## Acceptance tests
+
+`test/run-challenge-tests.sh` is a bash smoke test against a **deployed** stack. It uses the AWS CLI (same credentials as your terminal) and `curl`.
+
+**What it checks**
+
+1. CloudFormation stack is in a steady state and writes `describe-stacks` JSON under `output/`.
+2. CloudFront URL: `GET /` without `?key=` → **400**.
+3. CloudFront URL: `GET ?key=<missing object>` → **404** (requires Lambda role `s3:ListBucket` on the bucket so S3 returns “not found” instead of **403**).
+4. Uploads a small object to `S3_BUCKET_NAME`, then `GET ?key=...` via CloudFront → **200** and body match.
+5. Direct Lambda Function URL without SigV4 → **403** (`AWS_IAM`).
+
+**Run** (from repo root; adjust exports to match your account):
+
+```bash
+chmod +x test/run-challenge-tests.sh
+export AWS_REGION=ap-southeast-1
+export CFN_STACK_NAME=secure-serverless-asset-proxy
+export S3_BUCKET_NAME=your-bucket-name
+export ECR_REPOSITORY=your-ecr-repo-name   # optional; echoed for parity
+./test/run-challenge-tests.sh
+```
