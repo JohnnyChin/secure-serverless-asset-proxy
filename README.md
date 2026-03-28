@@ -117,7 +117,7 @@ Lambda role allows only:
 - create it manually first (ECR repo is outside of CloudFormation scope here)
 ```bash
 aws ecr create-repository \                            
-  --repository-name "${STACK_NAME}" \                                                              
+  --repository-name "${CFN_STACK_NAME}" \                                                              
   --image-tag-mutability IMMUTABLE \
   --image-scanning-configuration scanOnPush=true \
   --region "${AWS_REGION}"
