@@ -4,6 +4,37 @@ A secure, automated AWS solution that retrieves private assets from S3 through a
 
 ---
 
+## ❓ Problem Statement
+
+The goal of this challenge is to build a secure, automated system that retrieves private assets from S3 via a backend Lambda and serves them through a global CDN. This task demonstrates experience in Infrastructure as Code (IaC), Cloud Security, Go backend development, and Modern CI/CD patterns.
+
+
+Application (Go)
+---------------------
+Develop a minimal Go Lambda (utilizing AWS SDK v2).
+The handler must accept a key parameter from the URL.
+The function should fetch the corresponding object from a private S3 bucket and stream the byte content back to the requester.
+
+
+Infrastructure (CloudFormation)
+---------------------
+S3 Bucket: Must be completely private.
+Lambda Function: Exposed via a Function URL.
+CloudFront: Use the Lambda Function URL as the primary Origin.
+Security: Implement a Least-Privilege IAM Role.
+
+
+CI/CD Pipeline (GitHub Actions)
+---------------------
+Multi-Stage Workflow:
+1. Build: Compile the Go binary, build a Docker image, and push it to Amazon ECR.
+2. Automated Dispatch: Upon a successful push, the build job must automatically dispatch/trigger a separate deployment workflow.
+
+Immutability: Do not use the :latest tag.
+
+
+---
+
 ## 🚀 Overview
 
 This project demonstrates:
@@ -19,6 +50,7 @@ This project demonstrates:
 
 ## 🏗️ Architecture
 
+```text
 User
 ↓
 CloudFront (CDN)
@@ -28,7 +60,7 @@ Lambda Function URL (AWS_IAM + SigV4 via OAC)
 Lambda (Go, container)
 ↓
 Private S3 Bucket
-
+```
 
 ---
 
@@ -132,6 +164,8 @@ aws ecr create-repository \
 - S3_BUCKET_NAME
 - WORKFLOW_DISPATCH_TOKEN
 
+---
+
 ## Deploy
 
 Push to `main`.
@@ -145,20 +179,14 @@ The deploy workflow will:
 - deploy/update the CloudFormation stack
 - print stack outputs including the CloudFront domain name
 
-## Upload a test object
-
-```bash
-aws s3 cp ./sample.png s3://$S3_BUCKET_NAME/assets/sample.png
-
 
 ---
 
-
-## Acceptance tests
+## Challenge Acceptance Tests
 
 `test/run-challenge-tests.sh` is a bash smoke test against a **deployed** stack. It uses the AWS CLI (same credentials as your terminal) and `curl`.
 
-**What it checks**
+What it checks:
 
 1. CloudFormation stack is in a steady state and writes `describe-stacks` JSON under `output/`.
 2. CloudFront URL: `GET /` without `?key=` → **400**.
@@ -166,13 +194,13 @@ aws s3 cp ./sample.png s3://$S3_BUCKET_NAME/assets/sample.png
 4. Uploads a small object to `S3_BUCKET_NAME`, then `GET ?key=...` via CloudFront → **200** and body match.
 5. Direct Lambda Function URL without SigV4 → **403** (`AWS_IAM`).
 
-**Run** (from repo root; adjust exports to match your account):
+Run the below from repo root:
 
 ```bash
 chmod +x test/run-challenge-tests.sh
 export AWS_REGION=ap-southeast-1
 export CFN_STACK_NAME=secure-serverless-asset-proxy
 export S3_BUCKET_NAME=your-bucket-name
-export ECR_REPOSITORY=your-ecr-repo-name   # optional; echoed for parity
+export ECR_REPOSITORY=your-ecr-repo-name
 ./test/run-challenge-tests.sh
 ```
